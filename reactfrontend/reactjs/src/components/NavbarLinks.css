@@ -1,0 +1,37 @@
+/* src/components/Navbar.css */
+.navbarlinks {
+  border: 1px solid black;
+  color: black;
+    padding: 1em;
+    height: 40vh;
+    margin-top: 120px;
+    position: relative;
+    top: 85px;
+  }
+  
+  .navbarlinks * {
+    color: black;
+  }
+  
+  .navbarlinks ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    background-color: black;
+  }
+  
+  .navbarlinks li {
+    display: inline;
+  }
+  
+  .navbarlinks a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .navbarlinks a:hover {
+    text-decoration: underline;
+  }
+  

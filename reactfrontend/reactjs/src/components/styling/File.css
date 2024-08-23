@@ -1,0 +1,9 @@
+  .fileButton{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  }
+.subjButton{
+    display: flex;
+    justify-content: center;
+}

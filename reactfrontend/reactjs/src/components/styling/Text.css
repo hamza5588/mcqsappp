@@ -1,0 +1,38 @@
+
+.message-input-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: red;
+  }
+  
+  .message-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensure padding and border are included in the width */
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+  }
+  
+  .message-input:focus {
+    border-color: #007bff; /* Change border color on focus */
+  }
+
+
+
+/* --------- */
+  .btn-submit{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 50px;
+    padding: 1px;
+    padding: 10px 20px;
+}
+.btn{
+    background-color: black;
+    padding: 10px 20px;
+    border-radius: 20px;
+}

@@ -1,0 +1,115 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    width: 100%;
+}
+
+.Main-Section {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.content {
+    display: grid;
+    grid-template-rows: 0.5fr 0.2fr 3fr 0.5fr;
+    height: 100vh;
+}
+
+.content-section {
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.content-section:last-child {
+    border-bottom: none;
+}
+
+.select-options {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.select-options select, .select-options input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+}
+
+.select-questions {
+    padding-top: 50px;
+    display: flex;
+    justify-content: space-evenly;
+    margin: 0;
+    text-align: center;
+    align-items: center;
+    width: 20%;
+}
+
+.div-3 {
+    display: flex;
+    border: 1px solid black;
+}
+
+.div-3-option {
+    margin-left: 50px;
+    padding: 10px 20px;
+    border-radius: 20px;
+}
+
+.div-3 option {
+    font-weight: 300;
+}
+
+.div-4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.div-4-bmq-btn {
+    padding: 10px 80px;
+    border-radius: 30px;
+}
+
+.submit-btn {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 50px;
+    padding: 1px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 20px;
+}
+
+.difficulty-level {
+    padding: 10px;
+}
+
+#difficultylevel {
+    padding: 5px 40px;
+    border-radius: 20px;
+}
+
+.subjButton {
+    display: flex;
+    justify-content: center;
+}
