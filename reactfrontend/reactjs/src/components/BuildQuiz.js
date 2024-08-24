@@ -19,7 +19,6 @@ function BuildQuiz() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [result, setResult] = useState(null);
 
-
   useEffect(() => {
     axios
       .get('http://localhost:8000/api/mcq-questions/')
@@ -108,30 +107,25 @@ function BuildQuiz() {
     return { correct, incorrect, timeTaken };
   };
 
- 
-  // Inside your BuildQuiz component
   const navigate = useNavigate();
-  
+
   const handleSubmit = () => {
     setIsQuizActive(false);
     setIsSubmitted(true);
     const quizResult = calculateResult();
     setResult(quizResult);
   
-    // Prepare the payload
     const payload = {
       answers: userAnswers,
       quiz_id: 1,  // If you have a specific quiz ID, otherwise remove this line
       time_taken: quizResult.timeTaken,
     };
   
-    // Send the selected answers to the Django API
     axios
       .post('http://localhost:8000/api/submit-quiz/', payload)
       .then((response) => {
         console.log('Quiz submitted successfully:', response.data);
   
-        // Navigate to the QuizResult page with the results
         navigate('/result', { state: quizResult });
       })
       .catch((error) => {
@@ -139,29 +133,47 @@ function BuildQuiz() {
       });
   };
 
-  // Handle Edit Question
   const handleEdit = (questionId) => {
     const question = questions.find((q) => q.id === questionId);
     setSelectedQuestion(question);
     setIsModalOpen(true);
   };
 
-  // Handle Save Edited Question
   const handleSave = (updatedQuestion) => {
-    setQuestions((prevQuestions) =>
-      prevQuestions.map((q) => (q.id === updatedQuestion.id ? updatedQuestion : q))
-    );
-    setIsModalOpen(false);
+    axios
+      .put(`http://localhost:8000/api/mcq-questions/${updatedQuestion.id}/`, updatedQuestion)
+      .then((response) => {
+        setQuestions((prevQuestions) =>
+          prevQuestions.map((q) => (q.id === updatedQuestion.id ? response.data : q))
+        );
+        setIsModalOpen(false);
+      })
+      .catch((error) => {
+        console.error('Error updating question:', error);
+      });
   };
 
-  // Handle Delete Question
   const handleDelete = (questionId) => {
-    setQuestions((prevQuestions) => prevQuestions.filter((q) => q.id !== questionId));
+    axios
+      .delete(`http://localhost:8000/api/mcq-questions/${questionId}/`)
+      .then(() => {
+        setQuestions((prevQuestions) => prevQuestions.filter((q) => q.id !== questionId));
+      })
+      .catch((error) => {
+        console.error('Error deleting question:', error);
+      });
   };
 
-  // Handle Add New Question
   const handleAddQuestion = (newQuestion) => {
-    setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
+    axios
+      .post('http://localhost:8000/api/mcq-questions/', newQuestion)
+      .then((response) => {
+        setQuestions((prevQuestions) => [...prevQuestions, response.data]);
+        setIsAddQuestionModalOpen(false);
+      })
+      .catch((error) => {
+        console.error('Error adding new question:', error);
+      });
   };
 
   if (loading) {

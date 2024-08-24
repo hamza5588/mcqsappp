@@ -29,6 +29,7 @@ class GenerateQuestionsViewtext(APIView):
         # Generate questions
         try:
             questions = generate_questions_from_text(
+                text=prompt,
             
                 subject=prompt,
                 sub_topic=sub_topic,

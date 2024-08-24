@@ -43,6 +43,7 @@ const Text = () => {
         }
       );
       console.log("Submitted text:", response.data);
+      console.log("text is",text)
 
       // Navigate based on the question type
       if (questionType === "mcq") {
