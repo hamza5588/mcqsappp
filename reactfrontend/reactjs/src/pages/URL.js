@@ -43,8 +43,11 @@ const URL = () => {
       } else if (questionType === 'truefalse') {
         navigate('/BuildTrueFalseQuiz', { state: { questionType } });
       } else if (questionType === 'shortanswer') {
-        navigate('/BuildShortAnswerQuiz');
+        navigate('/BuildShortAnswerQuiz', { state: { questionType } });
+      } else if (questionType === 'fill in the blanks') {
+        navigate('/FillInTheBlanksQuiz', { state: { questionType } });
       }
+
       // Handle successful response (e.g., show a success message or redirect)
     } catch (error) {
       console.error('Error:', error);

@@ -50,8 +50,11 @@ const Fileupload = () => {
       } else if (questionType === 'truefalse') {
         navigate('/BuildTrueFalseQuiz', { state: { questionType } });
       } else if (questionType === 'shortanswer') {
-        navigate('/BuildShortAnswerQuiz');
+        navigate('/BuildShortAnswerQuiz', { state: { questionType } });
+      } else if (questionType === 'fill in the blanks') {
+        navigate('/FillInTheBlanksQuiz', { state: { questionType } });
       }
+
 
     } catch (error) {
       console.error('Error creating quiz:', error);
@@ -98,8 +101,7 @@ const Fileupload = () => {
               <option value="truefalse">True/False</option>
               <option value="shortanswer">Short Answer</option>
               <option value="fill in the blanks">Fill in the Blanks</option>
-              <option value="matching">Matching</option>
-              <option value="mix">Mix</option>
+           
             </select>
 
             <select id="language" value={language} onChange={(e) => setLanguage(e.target.value)}>

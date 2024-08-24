@@ -28,7 +28,7 @@ def generate_questions_from_text(
         return {"error": "No text provided for generating questions."}
 
     # Load the appropriate LLM
-    apikey = "sk-proj-IE2rVjhpgnuPsQ1DmOGjT3BlbkFJezvy08eqm0ZaoIyHXjKw"  # Use environment variables in production
+    apikey = "sk-upAu06nkebrihmJyLyPZ5Akxk0-d-YCB3Lw3LpLeLLT3BlbkFJo6YEVhvu8BuOvKAPlWcJHvcs4CUmxH231A7auhP4kA"  # Use environment variables in production
     logger.debug(f"API key loaded: {apikey[:4]}...")  # Only log a portion for security
 
     try:
@@ -148,14 +148,16 @@ def generate_questions_from_text(
             "type": question_type
     })
     logger.debug("my LLMChain executed successfully")
-    print(result)
+    # print(result)
      
 
     # Log and inspect the final result before returning
-    if result == {'message': 'Hello! How can I assist you today?'}:
-        logger.error("The model returned a fallback response. Check the input and prompt template.")
-        return {"error": "The model returned a fallback response. Check the input and prompt template."}
-    else:
-        logger.debug(f"Generated questions: {result}")
+    # if result == {'message': 'Hello! How can I assist you today?'}:
+    #     logger.error("The model returned a fallback response. Check the input and prompt template.")
+    #     return {"error": "The model returned a fallback response. Check the input and prompt template."}
+    # else:
+    #     logger.debug(f"Generated questions: {result}")
 
     return result
+
+print("succusfull")

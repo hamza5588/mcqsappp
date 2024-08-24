@@ -11,8 +11,6 @@ import os
 import tempfile
 from .helpingtext import generate_questions_from_text
 class GenerateQuestionsViewtext(APIView):
-    # parser_classes = (MultiPartParser, FormParser)
-
     def post(self, request, *args, **kwargs):
         print("working")
         # Retrieve form data
@@ -38,10 +36,21 @@ class GenerateQuestionsViewtext(APIView):
                 language=language,
                 question_type=question_type
             )
-           
+
             for key, value in questions.items():
-                question_text = value.get('question')
-                correct_answer = value.get('answer', value.get('correct_answer'))
+                if question_type=="mcq":
+                    question_text = value.get('question')
+                    correct_answer = value.get('answer')
+                elif question_type=="truefalse":
+                    question_text = value.get('statement')
+                    correct_answer = value.get('answer')
+                elif question_type=="fill in the blanks":
+                    question_text = value.get('sentence')
+                    correct_answer = value.get('answer')
+                
+                else:
+                    question_text = value.get('question')
+                    correct_answer = value.get('answer')
 
                 if question_type == 'mcq':
                     options = value.get('options')
@@ -62,11 +71,13 @@ class GenerateQuestionsViewtext(APIView):
                     )
 
                 elif question_type == 'fill in the blanks':
+                    print("....................working.............")
                     FillInTheBlanksQuestion.objects.create(
                         question_text=question_text,
                         correct_answers=correct_answer,
                         qno=number_of_questions,
                 )
+                    print("data is stored")
                 elif question_type == 'shortanswer':
                     QuestionAnswering.objects.create(
                         question=question_text,
@@ -89,105 +100,115 @@ from rest_framework import status
 from .models import MCQQuestion, TrueFalseQuestion, QuestionAnswering,FillInTheBlanksQuestion
 from .serializers import MCQQuestionSerializer, TrueFalseQuestionSerializer, QuestionAnsweringSerializer,FillInTheBlanksQuestionSerializer
 from .models import MCQQuestion
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import status
+from .models import MCQQuestion, TrueFalseQuestion, QuestionAnswering
+from .serializers import FillInTheBlanksQuestionSerializer, MCQQuestionSerializer, TrueFalseQuestionSerializer, QuestionAnsweringSerializer
+from .models import MCQQuestion
+@api_view(['GET'])
+def fill_in_the_blanks_questions(request):
+    questions = FillInTheBlanksQuestion.objects.all()
+    print(f"Retrieved Questions: {questions}")  # Debugging line
+    serializer = FillInTheBlanksQuestionSerializer(questions, many=True)
+    return Response(serializer.data)
 
 class MCQQuestionListCreateView(generics.ListCreateAPIView):
     serializer_class = MCQQuestionSerializer
 
     def get_queryset(self):
-        """
-        Override the get_queryset method to return only the last 10 MCQ questions.
-        """
-        return MCQQuestion.objects.order_by('-id')[:10]
+        questions = MCQQuestion.objects.order_by("-id")[0:1]
+        for i in questions:
+            qno=i.qno
+        
+
+        
+        queryset = MCQQuestion.objects.order_by("-id")[0:int(qno)]
+        # print("this is",qno)  # This will print to the terminal during a request
+
+        return queryset
 
 class MCQQuestionDetailView(generics.RetrieveUpdateDestroyAPIView):
-    # last_question = MCQQuestion.objects.order_by('-id').first()
-
-    # # Check if the last_question exists and extract the qno
-    # if last_question:
-    #     last_qno = last_question.qno
-    # else:
-    #     last_qno = None
-    # print(last_qno)
-
     queryset = MCQQuestion.objects.order_by("-id")
     serializer_class = MCQQuestionSerializer
 
 class TrueFalseQuestionListCreateView(generics.ListCreateAPIView):
-    last_question = TrueFalseQuestion.objects.order_by('-id').first()
+    serializer_class =  TrueFalseQuestionSerializer
 
-    # Check if the last_question exists and extract the qno
-    if last_question:
-        last_qno = last_question.qno
-    else:
-        last_qno = None
+    def get_queryset(self):
+        questions = TrueFalseQuestion.objects.order_by("-id")[0:1]
+        for i in questions:
+            qno=i.qno
+        
 
-    queryset = TrueFalseQuestion.objects.order_by("-id")
+        
+        queryset = TrueFalseQuestion.objects.order_by("-id")[0:int(qno)]
+        # print("this is",qno)  # This will print to the terminal during a request
 
-    serializer_class = TrueFalseQuestionSerializer
+        return queryset
 
 class TrueFalseQuestionDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = TrueFalseQuestion.objects.all()
     serializer_class = TrueFalseQuestionSerializer
 
-class QuestionAnsweringListCreateView(generics.ListCreateAPIView):
-   
-    last_question = QuestionAnswering.objects.order_by('-id').first()
-
-    # Check if the last_question exists and extract the qno
-    if last_question:
-        last_qno = last_question.qno
-    else:
-        last_qno = None
-
-    queryset = QuestionAnswering.objects.order_by("-id")
-
-    serializer_class = QuestionAnsweringSerializer
-
-class QuestionAnsweringDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = QuestionAnswering.objects.all()
-    serializer_class = QuestionAnsweringSerializer
-
-
 class FillInTheBlanksQuestionListCreateView(generics.ListCreateAPIView):
-    last_question = FillInTheBlanksQuestion.objects.order_by('-id').first()
-
-    # Check if the last_question exists and extract the qno
-    if last_question:
-        last_qno = last_question.qno
-    else:
-        last_qno = None
-
-    queryset = FillInTheBlanksQuestion.objects.order_by("-id")
     serializer_class = FillInTheBlanksQuestionSerializer
 
-from rest_framework import generics
-from .models import FillInTheBlanksQuestion
-from .serializers import FillInTheBlanksQuestionSerializer
+    def get_queryset(self):
+        questions = FillInTheBlanksQuestion.objects.order_by("-id")[0:1]
+        for i in questions:
+            qno=i.qno
+        
 
-class FillInTheBlanksQuestionListCreateView(generics.ListCreateAPIView):
-    last_question = FillInTheBlanksQuestion.objects.order_by('-id').first()
+        
+        queryset = FillInTheBlanksQuestion.objects.order_by("-id")[0:int(qno)]
+        # print("this is",qno)  # This will print to the terminal during a request
 
-    # Check if the last_question exists and extract the qno
-    if last_question:
-        last_qno = last_question.qno
-    else:
-        last_qno = None
-
-    queryset = FillInTheBlanksQuestion.objects.order_by("-id")
-    serializer_class = FillInTheBlanksQuestionSerializer
+        return queryset
 
 class FillInTheBlanksQuestionDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = FillInTheBlanksQuestion.objects.all()
     serializer_class = FillInTheBlanksQuestionSerializer
 
+class QuestionAnsweringListCreateView(generics.ListCreateAPIView):
+    serializer_class = QuestionAnsweringSerializer
 
+    def get_queryset(self):
+        questions = QuestionAnswering.objects.order_by("-id")[0:1]
+        for i in questions:
+            qno=i.qno
+        
 
-# Function-based views for handling specific cases
+        
+        queryset = MCQQuestion.objects.order_by("-id")[0:int(qno)]
+        # print("this is",qno)  # This will print to the terminal during a request
+
+        return queryset
+
+class QuestionAnsweringDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = QuestionAnswering.objects.all()
+    serializer_class = QuestionAnsweringSerializer
+
+# @api_view(['DELETE'])
+# def delete_question(request, question_id):
+#     question = get_object_or_404(MCQQuestion, id=question_id)
+#     question.delete()
+#     return JsonResponse({'message': 'Question deleted successfully!'})
+
+from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import MCQQuestion
+from .serializers import MCQQuestionSerializer
 
 @api_view(['GET', 'POST'])
 def mcq_question_list(request):
     if request.method == 'GET':
+        
+
         questions = MCQQuestion.objects.all()
         serializer = MCQQuestionSerializer(questions, many=True)
         return Response(serializer.data)
@@ -220,3 +241,87 @@ def mcq_question_detail(request, pk):
     elif request.method == 'DELETE':
         question.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+@api_view(['POST'])
+def submit_quiz(request):
+    user_answers = request.data.get('answers', {})
+    quiz_id = request.data.get('quiz_id', None)
+    time_taken = request.data.get('time_taken', None)
+    print(user_answers)
+    print(quiz_id)
+    print(time_taken)
+
+    # Process the answers
+    # Assuming you have a model for questions and answers
+    correct_count = 0
+    incorrect_count = 0
+
+    for question_id, user_answer in user_answers.items():
+        # print(question_id)
+        try:
+            question = MCQQuestion.objects.get(id=question_id)
+            # print(question)
+            correct_answer = question.correct_answer.strip().lower()
+            print(correct_answer)
+            if user_answer == correct_answer:
+                correct_count += 1
+            else:
+                incorrect_count += 1
+        except MCQQuestion.DoesNotExist:
+            continue
+
+    # Prepare the result
+    result = {
+        'correct': correct_count,
+        'incorrect': incorrect_count,
+        'time_taken': time_taken*100,
+    }
+    print(result)
+
+    return Response(result)
+
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import TrueFalseQuestion
+
+@api_view(['POST'])
+def submit_true_false_quiz(request):
+    user_answers = request.data.get('answers', {})
+    quiz_id = request.data.get('quiz_id', None)
+    time_taken = request.data.get('time_taken', None)
+    # print(user_answers)
+    # print(quiz_id)
+    print("time is",time_taken)
+
+    correct = 0
+    incorrect = 0
+
+    for question_id, user_answer in user_answers.items():
+        # print(question_id)
+        try:
+            question = TrueFalseQuestion.objects.get(id=question_id)
+            # print(question)
+            print(user_answer,".......................................")
+            print(question.correct_answer,"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+            if str(user_answer).lower() == str(question.correct_answer).lower():
+           
+                correct += 1
+            else:
+                incorrect += 1
+        except TrueFalseQuestion.DoesNotExist:
+            continue
+
+    result = {
+        'correct': correct,
+        'incorrect': incorrect,
+        'time_taken': time_taken,
+    }
+
+    return Response(result)

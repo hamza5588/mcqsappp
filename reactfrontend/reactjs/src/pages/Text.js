@@ -46,13 +46,16 @@ const Text = () => {
       console.log("text is",text)
 
       // Navigate based on the question type
-      if (questionType === "mcq") {
-        navigate("/BuildQuiz", { state: { questionType } });
-      } else if (questionType === "truefalse") {
-        navigate("/BuildTrueFalseQuiz", { state: { questionType } });
-      } else if (questionType === "shortanswer") {
-        navigate("/BuildShortAnswerQuiz");
+      if (questionType === 'mcq') {
+        navigate('/BuildQuiz', { state: { questionType } });
+      } else if (questionType === 'truefalse') {
+        navigate('/BuildTrueFalseQuiz', { state: { questionType } });
+      } else if (questionType === 'shortanswer') {
+        navigate('/BuildShortAnswerQuiz', { state: { questionType } });
+      } else if (questionType === 'fill in the blanks') {
+        navigate('/FillInTheBlanksQuiz', { state: { questionType } });
       }
+
     } catch (error) {
       console.error("There was an error!", error);
     } finally {

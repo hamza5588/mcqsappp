@@ -164,6 +164,7 @@ def generate_questions_from_file(
         llm=model,
         output_parser=output_parser
     )
+    print("..............................Working.......................")
 
     # Run the chain with the specified parameters
     result = mcq_chain.run({

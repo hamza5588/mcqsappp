@@ -43,8 +43,11 @@ const Prompt = () => {
       } else if (questionType === 'truefalse') {
         navigate('/BuildTrueFalseQuiz', { state: { questionType } });
       } else if (questionType === 'shortanswer') {
-        navigate('/BuildShortAnswerQuiz');
+        navigate('/BuildShortAnswerQuiz', { state: { questionType } });
+      } else if (questionType === 'fill in the blanks') {
+        navigate('/FillInTheBlanksQuiz', { state: { questionType } });
       }
+
     } catch (error) {
       console.error('Error generating questions:', error);
     } finally {

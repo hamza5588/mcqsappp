@@ -44,9 +44,22 @@ class GenerateQuestionsViewFromurl(APIView):
                 language=language,
                 question_type=question_type
             )
+            
             for key, value in questions.items():
-                question_text = value.get('question')
-                correct_answer = value.get('answer', value.get('correct_answer'))
+                
+                if question_type=="mcq":
+                    question_text = value.get('question')
+                    correct_answer = value.get('answer')
+                elif question_type=="truefalse":
+                    question_text = value.get('statement')
+                    correct_answer = value.get('answer')
+                elif question_type=="fill in the blanks":
+                    question_text = value.get('sentence')
+                    correct_answer = value.get('answer')
+                
+                else:
+                    question_text = value.get('question')
+                    correct_answer = value.get('answer')
 
                 if question_type == 'mcq':
                     options = value.get('options')
@@ -66,6 +79,14 @@ class GenerateQuestionsViewFromurl(APIView):
                         qno=number_of_questions
                         
                     )
+                    
+                    FillInTheBlanksQuestion.objects.create(
+                        question_text=question_text,
+                        correct_answers=correct_answer,
+                        qno=number_of_questions
+                )
+                    
+                    print("fill in the blanks data saved")
                 elif question_type == 'shortanswer':
                     QuestionAnswering.objects.create(
                         question=question_text,
