@@ -8,6 +8,11 @@ import BuildShortAnswerQuiz from './components/BuildShortAnswerQuiz';
 import QuizResult from './components/QuizResult';
 import FillInTheBlanksQuiz from './components/FillInTheBlanksQuiz'; 
 import Subject from './pages/Subject';
+import Text from './pages/Text';
+import File from './pages/File';
+import Prompt from './pages/Prompt';
+import URL from './pages/URL';
+
 function App() {
   const location = useLocation();
 
@@ -21,7 +26,11 @@ function App() {
       
 
       <Routes>
+      <Route  path='/' element={<Text/>} Component={Text}/>
       <Route path="/Subject" element={<Subject />} Component={Subject} />
+      <Route path="/file" element={<File/>} Component={File} />
+        <Route path="/prompt" element={<Prompt />} Component={Prompt} />
+        <Route path="/url" element={<URL />} Component={URL}/>
    
         <Route path="/BuildQuiz" element={<BuildQuiz />} />
         <Route path="/BuildTrueFalseQuiz" element={<BuildTrueFalseQuiz />} />

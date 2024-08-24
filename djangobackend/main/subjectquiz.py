@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework import status
-from .models import MCQQuestion, TrueFalseQuestion, QuestionAnswering
+from .models import FillInTheBlanksQuestion, MCQQuestion, TrueFalseQuestion, QuestionAnswering
 from .helpingsubject import generate_questions_from_subject
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
@@ -20,9 +20,6 @@ class GenerateQuestionsViewsubject(APIView):
         difficulty_level = request.data.get('difficulty_level')
 
         print(subject, sub_topic, number_of_questions, language, difficulty_level)
-        from .models import QuestionAnswering
-        latest_question = QuestionAnswering.objects.order_by('-id').first()
-        print(latest_question)
 
         # Generate questions
         try:
@@ -102,7 +99,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from .models import MCQQuestion, TrueFalseQuestion, QuestionAnswering
-from .serializers import MCQQuestionSerializer, TrueFalseQuestionSerializer, QuestionAnsweringSerializer
+from .serializers import FillInTheBlanksQuestionSerializer, MCQQuestionSerializer, TrueFalseQuestionSerializer, QuestionAnsweringSerializer
 from .models import MCQQuestion
 @api_view(['GET'])
 def fill_in_the_blanks_questions(request):
@@ -112,86 +109,80 @@ def fill_in_the_blanks_questions(request):
     return Response(serializer.data)
 
 class MCQQuestionListCreateView(generics.ListCreateAPIView):
-    last_question = MCQQuestion.objects.all().first()
-    print(last_question)
-
-    # Check if the last_question exists and extract the qno
-    if last_question:
-        last_qno = last_question.qno
-    else:
-        last_qno = None
-    print("the last q no is",last_qno)
-
-    queryset = MCQQuestion.objects.order_by("-id")[0:20]
     serializer_class = MCQQuestionSerializer
 
+    def get_queryset(self):
+        questions = MCQQuestion.objects.order_by("-id")[0:1]
+        for i in questions:
+            qno=i.qno
+        
+
+        
+        queryset = MCQQuestion.objects.order_by("-id")[0:int(qno)]
+        # print("this is",qno)  # This will print to the terminal during a request
+
+        return queryset
+
 class MCQQuestionDetailView(generics.RetrieveUpdateDestroyAPIView):
-    # last_question = MCQQuestion.objects.order_by('-id').first()
-
-    # # Check if the last_question exists and extract the qno
-    # if last_question:
-    #     last_qno = last_question.qno
-    # else:
-    #     last_qno = None
-    # print(last_qno)
-
     queryset = MCQQuestion.objects.order_by("-id")
     serializer_class = MCQQuestionSerializer
 
 class TrueFalseQuestionListCreateView(generics.ListCreateAPIView):
-    last_question = TrueFalseQuestion.objects.order_by('-id').first()
+    serializer_class =  TrueFalseQuestionSerializer
 
-    # Check if the last_question exists and extract the qno
-    if last_question:
-        last_qno = last_question.qno
-    else:
-        last_qno = None
+    def get_queryset(self):
+        questions = TrueFalseQuestion.objects.order_by("-id")[0:1]
+        for i in questions:
+            qno=i.qno
+        
 
-    queryset = TrueFalseQuestion.objects.order_by("-id")[:int(last_qno)]
+        
+        queryset = TrueFalseQuestion.objects.order_by("-id")[0:int(qno)]
+        # print("this is",qno)  # This will print to the terminal during a request
 
-    serializer_class = TrueFalseQuestionSerializer
+        return queryset
 
 class TrueFalseQuestionDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = TrueFalseQuestion.objects.all()
     serializer_class = TrueFalseQuestionSerializer
 
-class QuestionAnsweringListCreateView(generics.ListCreateAPIView):
-   
-    last_question = QuestionAnswering.objects.order_by('-id').first()
-
-    # Check if the last_question exists and extract the qno
-    if last_question:
-        last_qno = last_question.qno
-    else:
-        last_qno = None
-
-    queryset = QuestionAnswering.objects.order_by("-id")[:int(last_qno)]
-
-    serializer_class = QuestionAnsweringSerializer
-
-class QuestionAnsweringDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = QuestionAnswering.objects.all()
-    serializer_class = QuestionAnsweringSerializer
-
-from rest_framework import generics
-from .models import FillInTheBlanksQuestion
-from .serializers import FillInTheBlanksQuestionSerializer
-
 class FillInTheBlanksQuestionListCreateView(generics.ListCreateAPIView):
-    last_question = FillInTheBlanksQuestion.objects.order_by('-id').first()
-
-    # Check if the last_question exists and extract the qno
-    if last_question:
-        last_qno = last_question.qno
-    else:
-        last_qno = None
-
-    queryset = FillInTheBlanksQuestion.objects.order_by("-id")[10 if last_qno is None else int(last_qno):]
     serializer_class = FillInTheBlanksQuestionSerializer
+
+    def get_queryset(self):
+        questions = FillInTheBlanksQuestion.objects.order_by("-id")[0:1]
+        for i in questions:
+            qno=i.qno
+        
+
+        
+        queryset = FillInTheBlanksQuestion.objects.order_by("-id")[0:int(qno)]
+        # print("this is",qno)  # This will print to the terminal during a request
+
+        return queryset
 
 class FillInTheBlanksQuestionDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = FillInTheBlanksQuestion.objects.all()
     serializer_class = FillInTheBlanksQuestionSerializer
+
+class QuestionAnsweringListCreateView(generics.ListCreateAPIView):
+    serializer_class = QuestionAnsweringSerializer
+
+    def get_queryset(self):
+        questions = QuestionAnswering.objects.order_by("-id")[0:1]
+        for i in questions:
+            qno=i.qno
+        
+
+        
+        queryset = MCQQuestion.objects.order_by("-id")[0:int(qno)]
+        # print("this is",qno)  # This will print to the terminal during a request
+
+        return queryset
+
+class QuestionAnsweringDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = QuestionAnswering.objects.all()
+    serializer_class = QuestionAnsweringSerializer
 
 # @api_view(['DELETE'])
 # def delete_question(request, question_id):

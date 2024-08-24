@@ -81,16 +81,19 @@ from .serializers import MCQQuestionSerializer, TrueFalseQuestionSerializer, Que
 from .models import MCQQuestion
 
 class MCQQuestionListCreateView(generics.ListCreateAPIView):
-    last_question = MCQQuestion.objects.order_by('-id').first()
+    serializer_class = QuestionAnsweringSerializer
 
-    # Check if the last_question exists and extract the qno
-    if last_question:
-        last_qno = last_question.qno
-    else:
-        last_qno = None
+    def get_queryset(self):
+        questions = QuestionAnswering.objects.order_by("-id")[0:1]
+        for i in questions:
+            qno=i.qno
+        
 
-    queryset = MCQQuestion.objects.order_by("-id")
-    serializer_class = MCQQuestionSerializer
+        
+        queryset = MCQQuestion.objects.order_by("-id")[0:int(qno)]
+        # print("this is",qno)  # This will print to the terminal during a request
+
+        return queryset
 
 class MCQQuestionDetailView(generics.RetrieveUpdateDestroyAPIView):
     # last_question = MCQQuestion.objects.order_by('-id').first()
@@ -106,17 +109,19 @@ class MCQQuestionDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MCQQuestionSerializer
 
 class TrueFalseQuestionListCreateView(generics.ListCreateAPIView):
-    last_question = TrueFalseQuestion.objects.order_by('-id').first()
+    serializer_class =  TrueFalseQuestionSerializer
 
-    # Check if the last_question exists and extract the qno
-    if last_question:
-        last_qno = last_question.qno
-    else:
-        last_qno = None
+    def get_queryset(self):
+        questions = TrueFalseQuestion.objects.order_by("-id")[0:1]
+        for i in questions:
+            qno=i.qno
+        
 
-    queryset = TrueFalseQuestion.objects.order_by("-id")
+        
+        queryset = TrueFalseQuestion.objects.order_by("-id")[0:int(qno)]
+        # print("this is",qno)  # This will print to the terminal during a request
 
-    serializer_class = TrueFalseQuestionSerializer
+        return queryset
 
 class TrueFalseQuestionDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = TrueFalseQuestion.objects.all()
@@ -145,16 +150,19 @@ from .models import FillInTheBlanksQuestion
 from .serializers import FillInTheBlanksQuestionSerializer
 
 class FillInTheBlanksQuestionListCreateView(generics.ListCreateAPIView):
-    last_question = FillInTheBlanksQuestion.objects.order_by('-id').first()
-
-    # Check if the last_question exists and extract the qno
-    if last_question:
-        last_qno = last_question.qno
-    else:
-        last_qno = None
-
-    queryset = FillInTheBlanksQuestion.objects.order_by("-id")
     serializer_class = FillInTheBlanksQuestionSerializer
+
+    def get_queryset(self):
+        questions = FillInTheBlanksQuestion.objects.order_by("-id")[0:1]
+        for i in questions:
+            qno=i.qno
+        
+
+        
+        queryset = FillInTheBlanksQuestion.objects.order_by("-id")[0:int(qno)]
+        # print("this is",qno)  # This will print to the terminal during a request
+
+        return queryset
 
 class FillInTheBlanksQuestionDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = FillInTheBlanksQuestion.objects.all()

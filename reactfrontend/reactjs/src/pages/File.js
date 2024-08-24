@@ -32,6 +32,7 @@ const Fileupload = () => {
     formData.append('question_type', questionType);
     formData.append('language', language);
     formData.append('difficulty_level', difficultyLevel);
+    console.log(numberOfQuestions)
 
     try {
       // Perform POST request with FormData

@@ -24,7 +24,7 @@ def generate_questions_from_subject(
     print("Loaded model")
 
     context = "generate the quiz on user topic"
-    print("Context set:", context)
+    # print("Context set:", context)
 
     # Define the prompt template
     prompt_template = PromptTemplate(
@@ -155,6 +155,6 @@ def generate_questions_from_subject(
         "type": question_type
     })
 
-    print("Result generated:", result)
+    # print("Result generated:", result)
 
     return result

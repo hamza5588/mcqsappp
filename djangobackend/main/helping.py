@@ -12,11 +12,13 @@ def generate_questions_from_file(
     file_path: str = None,
     subject: str = "general",
     sub_topic: str = "overview",
-    num_questions: int = 5,
+    num_questions:str ="5",
     difficulty_level: str = "Easy",
     language: str = "English",
     question_type: str = "MCQs"
 ):
+    
+    print(num_questions)
     """
     Generates questions based on the content of the uploaded file and specified parameters.
 
@@ -53,6 +55,7 @@ def generate_questions_from_file(
     text_splitter = CharacterTextSplitter()
     split_documents = text_splitter.split_documents(document)
     context = ' '.join([doc.page_content for doc in split_documents])
+    print(context)
 
     # Define the prompt template
     prompt_template = PromptTemplate(
