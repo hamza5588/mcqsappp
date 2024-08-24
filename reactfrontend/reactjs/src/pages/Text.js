@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { ClipLoader } from 'react-spinners'; // Import the spinner library
-import '../components/styling/Prompt.css'// Import the CSS used in Prompt.js
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners"; // Import the spinner library
+import "../components/styling/Prompt.css"; // Import the CSS used in Prompt.js
+import Subject from "./Subject";
 
 const Text = () => {
   // State to store form values
-  const [text, setText] = useState('');
-  const [numQuestions, setNumQuestions] = useState('');
-  const [questionType, setQuestionType] = useState('');
-  const [language, setLanguage] = useState('');
-  const [difficultyLevel, setDifficultyLevel] = useState('');
+  const [text, setText] = useState("");
+  const [numQuestions, setNumQuestions] = useState("");
+  const [questionType, setQuestionType] = useState("");
+  const [language, setLanguage] = useState("");
+  const [difficultyLevel, setDifficultyLevel] = useState("");
   const [loading, setLoading] = useState(false); // State for loading spinner
   const navigate = useNavigate();
 
@@ -21,43 +22,45 @@ const Text = () => {
 
     // Create a FormData object
     const formData = new FormData();
-    formData.append('text', text);
-    formData.append('num_questions', numQuestions);
-    formData.append('question_type', questionType);
-    formData.append('language', language);
-    formData.append('difficulty_level', difficultyLevel);
-    console.log('Text:', text);
-    console.log('Number of Questions:', numQuestions);
-    console.log('Language:', language);
-  
+    formData.append("text", text);
+    formData.append("num_questions", numQuestions);
+    formData.append("question_type", questionType);
+    formData.append("language", language);
+    formData.append("difficulty_level", difficultyLevel);
+    console.log("Text:", text);
+    console.log("Number of Questions:", numQuestions);
+    console.log("Language:", language);
 
     try {
       // Send a POST request with form data
-      const response = await axios.post('http://127.0.0.1:8000/api/text/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      console.log('Submitted text:', response.data);
-   
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/text/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("Submitted text:", response.data);
+
       // Navigate based on the question type
-      if (questionType === 'mcq') {
-        navigate('/BuildQuiz', { state: { questionType } });
-      } else if (questionType === 'truefalse') {
-        navigate('/BuildTrueFalseQuiz', { state: { questionType } });
-      } else if (questionType === 'shortanswer') {
-        navigate('/BuildShortAnswerQuiz');
+      if (questionType === "mcq") {
+        navigate("/BuildQuiz", { state: { questionType } });
+      } else if (questionType === "truefalse") {
+        navigate("/BuildTrueFalseQuiz", { state: { questionType } });
+      } else if (questionType === "shortanswer") {
+        navigate("/BuildShortAnswerQuiz");
       }
     } catch (error) {
-      console.error('There was an error!', error);
+      console.error("There was an error!", error);
     } finally {
       setLoading(false); // Hide spinner when response is received
     }
   };
 
   return (
-    <div className="Main-Section">
-      {/* Main section styling */}
+    <>
       <div className="main-hero-section">
         <div className="prompt-input-container">
           <textarea
@@ -122,8 +125,10 @@ const Text = () => {
           </form>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
 export default Text;
+
+//! this is for the test
