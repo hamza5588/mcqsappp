@@ -3,6 +3,7 @@ import '../components/styling/Prompt.css';
 import SubjBtn from '../components/build quiz btn/SubjBtn';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners'; // Import the spinner library
 
 const Prompt = () => {
   // State to store form values
@@ -11,12 +12,13 @@ const Prompt = () => {
   const [questionType, setQuestionType] = useState('');
   const [language, setLanguage] = useState('');
   const [difficultyLevel, setDifficultyLevel] = useState('');
+  const [loading, setLoading] = useState(false); // State for loading spinner
   const navigate = useNavigate();
-  
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Show spinner when form is submitted
 
     // Create a FormData object
     const formData = new FormData();
@@ -35,6 +37,7 @@ const Prompt = () => {
       });
       console.log('Response:', response.data);
 
+      // Navigate based on the question type
       if (questionType === 'mcq') {
         navigate('/BuildQuiz', { state: { questionType } });
       } else if (questionType === 'truefalse') {
@@ -44,6 +47,8 @@ const Prompt = () => {
       }
     } catch (error) {
       console.error('Error generating questions:', error);
+    } finally {
+      setLoading(false); // Hide spinner when response is received
     }
   };
 
@@ -109,7 +114,9 @@ const Prompt = () => {
               <option value="hard" className='diff-btn'>Hard</option>
             </select>
 
-            <button type="submit" className="submit-button">Generate Questions</button>
+            <button type="submit" className="submit-button" disabled={loading}>
+              {loading ? <ClipLoader size={24} color={"#fff"} /> : "Generate Questions"}
+            </button>
           </form>
         </div>
       </div>

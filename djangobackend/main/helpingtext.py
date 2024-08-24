@@ -8,7 +8,7 @@ from langchain_core.output_parsers.json import JsonOutputParser
 from langchain_openai import ChatOpenAI
 
 
-def generate_questions_from_file(
+def generate_questions_from_text(
     text: str = None,
     subject: str = "general",
     sub_topic: str = "overview",
@@ -17,7 +17,7 @@ def generate_questions_from_file(
     language: str = "English",
     question_type: str = "MCQs"
 ):
-    print("hello")
+    print("this is",text)
     """
     Generates questions based on the content of the uploaded file and specified parameters.
 
@@ -192,6 +192,5 @@ def generate_questions_from_file(
         "type": question_type
     })
 
-    print(result)
 
     return result

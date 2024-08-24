@@ -9,26 +9,26 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Quiz
 import os
 import tempfile
-from .helpingtext import generate_questions_from_file
+from .helpingtext import generate_questions_from_text
 class GenerateQuestionsViewtext(APIView):
     # parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
         print("working")
         # Retrieve form data
-        prompt = request.data['text']
+        prompt = request.data.get("text",None)
         topic = "detect by own"
         sub_topic = "detect by own"
         number_of_questions = int(request.data['num_questions'])
         question_type = request.data['question_type']
         language = request.data['language']
         difficulty_level = request.data['difficulty_level']
-        print(prompt,topic,sub_topic,number_of_questions,language,difficulty_level)
+        print(prompt)
 
         
         # Generate questions
         try:
-            questions = generate_questions_from_file(
+            questions = generate_questions_from_text(
             
                 subject=prompt,
                 sub_topic=sub_topic,
@@ -90,16 +90,13 @@ from .serializers import MCQQuestionSerializer, TrueFalseQuestionSerializer, Que
 from .models import MCQQuestion
 
 class MCQQuestionListCreateView(generics.ListCreateAPIView):
-    last_question = MCQQuestion.objects.order_by('-id').first()
-
-    # Check if the last_question exists and extract the qno
-    if last_question:
-        last_qno = last_question.qno
-    else:
-        last_qno = None
-
-    queryset = MCQQuestion.objects.order_by("-id")
     serializer_class = MCQQuestionSerializer
+
+    def get_queryset(self):
+        """
+        Override the get_queryset method to return only the last 10 MCQ questions.
+        """
+        return MCQQuestion.objects.order_by('-id')[:10]
 
 class MCQQuestionDetailView(generics.RetrieveUpdateDestroyAPIView):
     # last_question = MCQQuestion.objects.order_by('-id').first()

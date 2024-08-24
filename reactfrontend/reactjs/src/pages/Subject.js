@@ -3,6 +3,7 @@ import axios from 'axios';
 import '../components/styling/Subject.css';
 import SubjBtn from '../components/build quiz btn/SubjBtn';
 import { useNavigate } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners'; // Import the spinner library
 
 const Subject = () => {
   const [subject, setSubject] = useState('');
@@ -12,10 +13,12 @@ const Subject = () => {
   const [questionType, setQuestionType] = useState('');
   const [language, setLanguage] = useState('');
   const [difficultyLevel, setDifficultyLevel] = useState('');
+  const [loading, setLoading] = useState(false); // State for loading spinner
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Show spinner when form is submitted
 
     const formData = new FormData();
     formData.append('subject', subject);
@@ -48,6 +51,8 @@ const Subject = () => {
 
     } catch (error) {
       console.error('Error generating questions:', error);
+    } finally {
+      setLoading(false); // Hide spinner when response is received
     }
   };
 
@@ -62,7 +67,7 @@ const Subject = () => {
               <option value="">Select Subject</option>
               <option value="math">Mathematics</option>
               <option value="science">Science</option>
-              <option value="history">Hwistory</option>
+              <option value="history">History</option>
             </select>
 
             <select id="topic" value={topic} onChange={(e) => setTopic(e.target.value)}>
@@ -106,7 +111,9 @@ const Subject = () => {
               </select>
             </div>
 
-            <button type="submit" className="submit-btn">Generate Questions</button>
+            <button type="submit" className="submit-btn" disabled={loading}>
+              {loading ? <ClipLoader size={24} color={"#fff"} /> : "Generate Questions"}
+            </button>
           </form>
         </div>
       </div>

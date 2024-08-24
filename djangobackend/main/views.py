@@ -440,6 +440,9 @@ def receive_text(request):
                 correct_option_key = question_details['correct_answer']
                 correct_option = option_instances[correct_option_key]
                 Answer.objects.create(question=question, correct_option=correct_option)
+                from .models import QuestionAnswering
+                latest_question = QuestionAnswering.objects.order_by('-id').first()
+                print(latest_question)
                 
                 print(f"Stored {question_id} with correct answer {correct_option_key} in the database.")
 

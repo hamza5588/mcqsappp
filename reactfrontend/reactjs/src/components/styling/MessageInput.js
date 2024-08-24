@@ -19,6 +19,13 @@ const MessageInput = () => {
   };
 
   const handleSubmit = async () => {
+    if (message.trim() === '') {
+      alert('Message cannot be empty');
+      return;
+    }
+
+    console.log('Message to be submitted:', message); // Debugging log
+
     const payload = {
       text: message,
     };
@@ -29,7 +36,9 @@ const MessageInput = () => {
       navigate('/BuildQuiz');
     } catch (error) {
       console.error('There was an error!', error);
-      console.error('Error Response:', error.response);
+      if (error.response) {
+        console.error('Error Response:', error.response.data);
+      }
     }
   };
 
@@ -44,7 +53,9 @@ const MessageInput = () => {
             onChange={handleInputChange}
           />
         </div>
-        <BtnText handleClick={handleSubmit} />
+        <div className="submit-button-container">
+          <BtnText handleClick={handleSubmit} buttonText="Submit" />
+        </div>
       </div>
     </div>
   );

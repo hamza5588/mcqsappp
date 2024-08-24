@@ -20,6 +20,9 @@ class GenerateQuestionsViewsubject(APIView):
         difficulty_level = request.data.get('difficulty_level')
 
         print(subject, sub_topic, number_of_questions, language, difficulty_level)
+        from .models import QuestionAnswering
+        latest_question = QuestionAnswering.objects.order_by('-id').first()
+        print(latest_question)
 
         # Generate questions
         try:
@@ -109,15 +112,17 @@ def fill_in_the_blanks_questions(request):
     return Response(serializer.data)
 
 class MCQQuestionListCreateView(generics.ListCreateAPIView):
-    last_question = MCQQuestion.objects.order_by('-id').first()
+    last_question = MCQQuestion.objects.all().first()
+    print(last_question)
 
     # Check if the last_question exists and extract the qno
     if last_question:
         last_qno = last_question.qno
     else:
         last_qno = None
+    print("the last q no is",last_qno)
 
-    queryset = MCQQuestion.objects.order_by("-id")
+    queryset = MCQQuestion.objects.order_by("-id")[0:20]
     serializer_class = MCQQuestionSerializer
 
 class MCQQuestionDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -142,7 +147,7 @@ class TrueFalseQuestionListCreateView(generics.ListCreateAPIView):
     else:
         last_qno = None
 
-    queryset = TrueFalseQuestion.objects.order_by("-id")
+    queryset = TrueFalseQuestion.objects.order_by("-id")[:int(last_qno)]
 
     serializer_class = TrueFalseQuestionSerializer
 
@@ -160,7 +165,7 @@ class QuestionAnsweringListCreateView(generics.ListCreateAPIView):
     else:
         last_qno = None
 
-    queryset = QuestionAnswering.objects.order_by("-id")
+    queryset = QuestionAnswering.objects.order_by("-id")[:int(last_qno)]
 
     serializer_class = QuestionAnsweringSerializer
 
@@ -181,7 +186,7 @@ class FillInTheBlanksQuestionListCreateView(generics.ListCreateAPIView):
     else:
         last_qno = None
 
-    queryset = FillInTheBlanksQuestion.objects.order_by("-id")
+    queryset = FillInTheBlanksQuestion.objects.order_by("-id")[10 if last_qno is None else int(last_qno):]
     serializer_class = FillInTheBlanksQuestionSerializer
 
 class FillInTheBlanksQuestionDetailView(generics.RetrieveUpdateDestroyAPIView):

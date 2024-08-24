@@ -1,6 +1,5 @@
 import React from 'react';
-import './SubjBtn';
-
+import './SubjBtn'; // Assuming you intended to import the CSS file
 
 function BtnText({ handleClick }) {
   return (

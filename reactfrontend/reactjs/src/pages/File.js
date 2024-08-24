@@ -4,6 +4,8 @@ import '../components/styling/File.css';
 import SubjBtn from '../components/build quiz btn/SubjBtn';
 import BtnText from '../components/build quiz btn/BtnText';
 import { useNavigate } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners'; // Import the spinner library
+import NavbarLinks from '../components/NavbarLinks';
 
 const Fileupload = () => {
   const [file, setFile] = useState(null);
@@ -12,6 +14,7 @@ const Fileupload = () => {
   const [language, setLanguage] = useState('');
   const [difficultyLevel, setDifficultyLevel] = useState('');
   const [quizzes, setQuizzes] = useState([]);
+  const [loading, setLoading] = useState(false); // State for loading spinner
   const navigate = useNavigate();
 
   const handleFileChange = (e) => {
@@ -20,6 +23,7 @@ const Fileupload = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Show spinner when form is submitted
 
     // Create a FormData instance
     const formData = new FormData();
@@ -31,15 +35,15 @@ const Fileupload = () => {
 
     try {
       // Perform POST request with FormData
-      const response = await axios.post('http://localhost:8000//api/generate-questions/', formData, {
+      const response = await axios.post('http://localhost:8000/api/generate-questions/', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       });
       console.log('Quiz created:', response.data);
       fetchQuizzes(); // Refresh the quiz list after creating a new one
 
-
+      // Navigate based on the question type
       if (questionType === 'mcq') {
         navigate('/BuildQuiz', { state: { questionType } });
       } else if (questionType === 'truefalse') {
@@ -50,6 +54,8 @@ const Fileupload = () => {
 
     } catch (error) {
       console.error('Error creating quiz:', error);
+    } finally {
+      setLoading(false); // Hide spinner when response is received
     }
   };
 
@@ -108,17 +114,22 @@ const Fileupload = () => {
               <option value="medium">Medium</option>
               <option value="hard">Hard</option>
             </select>
-            <BtnText handleClick={handleSubmit} />
+
+            <button type="submit" className="submit-button" disabled={loading}>
+              {loading ? <ClipLoader size={24} color={"#fff"} /> : "Generate Quiz"}
+            </button>
           </form>
         </div>
       </div>
       <div className="fileButton">
         <SubjBtn />
+        <NavbarLinks />
+        
       </div>
       <div className="quiz-list">
         <h2>Quiz List</h2>
         <ul>
-          {quizzes.map(quiz => (
+          {quizzes.map((quiz) => (
             <li key={quiz.id}>
               <p>ID: {quiz.id}</p>
               <p>Number of Questions: {quiz.number_of_questions}</p>

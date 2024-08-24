@@ -1,33 +1,46 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Main from './Main';
+import NavbarLinks from './components/NavbarLinks';
 import BuildQuiz from './components/BuildQuiz';
 import BuildTrueFalseQuiz from './components/BuildTrueFalseQuiz';
 import BuildShortAnswerQuiz from './components/BuildShortAnswerQuiz';
-import NavbarLinks from './components/NavbarLinks'; // Import NavbarLinks
 import QuizResult from './components/QuizResult';
 import FillInTheBlanksQuiz from './components/FillInTheBlanksQuiz'; 
-
+import Subject from './pages/Subject';
 function App() {
+  const location = useLocation();
+
+  // Check if the current path is the root path
+  const isRootPath = location.pathname === '/';
+
   return (
-    <Router>
+    <div>
+      {isRootPath && <Main />} {/* Render Main only if the current path is '/' */}
+      {isRootPath && <NavbarLinks />}
+      
+
       <Routes>
-        
+      <Route path="/Subject" element={<Subject />} Component={Subject} />
+   
         <Route path="/BuildQuiz" element={<BuildQuiz />} />
         <Route path="/BuildTrueFalseQuiz" element={<BuildTrueFalseQuiz />} />
         <Route path="/BuildShortAnswerQuiz" element={<BuildShortAnswerQuiz />} />
         <Route path="/FillInTheBlanksQuiz" element={<FillInTheBlanksQuiz />} />
-        
         <Route path="/result" element={<QuizResult />} />
+      
       </Routes>
-      <NavbarLinks /> {/* Ensure NavbarLinks is outside of the Routes */}
-      {/* <Route path="/" element={<Main />} /> */}
+    </div>
 
-    </Router>
-  
-    
-    
   );
 }
 
-export default App;
+function AppWrapper() {
+  return (
+    <Router>
+      <App />
+    </Router>
+  );
+}
+
+export default AppWrapper;
