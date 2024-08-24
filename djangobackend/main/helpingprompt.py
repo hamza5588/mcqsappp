@@ -35,7 +35,7 @@ def generate_questions_from_file(
     """
     
     # Load the appropriate LLM
-    apikey = "sk-proj-IE2rVjhpgnuPsQ1DmOGjT3BlbkFJezvy08eqm0ZaoIyHXjKw"
+    apikey = "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"
 
     print(apikey)
 

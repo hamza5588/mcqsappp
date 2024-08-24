@@ -35,7 +35,7 @@ def generate_questions_from_file(
     - result (dict): The generated questions in JSON format.
     """
     
-    apikey = "sk-proj-IE2rVjhpgnuPsQ1DmOGjT3BlbkFJezvy08eqm0ZaoIyHXjKw"
+    apikey = "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"
 
     # Load the appropriate LLM
     model = ChatOpenAI(openai_api_key=apikey)

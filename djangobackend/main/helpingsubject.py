@@ -6,7 +6,7 @@ from langchain_core.output_parsers.json import JsonOutputParser
 from langchain_openai import ChatOpenAI
 
 # apikey = "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"
-apikey="sk-proj-IE2rVjhpgnuPsQ1DmOGjT3BlbkFJezvy08eqm0ZaoIyHXjKw"
+apikey="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"
 
 def generate_questions_from_subject(
     subject: str = "general",

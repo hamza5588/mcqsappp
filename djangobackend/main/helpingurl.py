@@ -22,7 +22,7 @@ def generate_questions_from_file(
 
     logger.debug(f"Parameters: subject={subject}, sub_topic={sub_topic}, num_questions={num_questions}, difficulty_level={difficulty_level}, language={language}, question_type={question_type}")
 
-    apikey = "sk-proj-IE2rVjhpgnuPsQ1DmOGjT3BlbkFJezvy08eqm0ZaoIyHXjKw"
+    apikey = "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"
     model = ChatOpenAI(openai_api_key=apikey)
 
     try:

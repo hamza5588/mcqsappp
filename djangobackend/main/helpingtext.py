@@ -28,7 +28,7 @@ def generate_questions_from_text(
         return {"error": "No text provided for generating questions."}
 
     # Load the appropriate LLM
-    apikey = "sk-upAu06nkebrihmJyLyPZ5Akxk0-d-YCB3Lw3LpLeLLT3BlbkFJo6YEVhvu8BuOvKAPlWcJHvcs4CUmxH231A7auhP4kA"  # Use environment variables in production
+    apikey = "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"  # Use environment variables in production
     logger.debug(f"API key loaded: {apikey[:4]}...")  # Only log a portion for security
 
     try:
